@@ -1,6 +1,6 @@
 import mongoose from "mongoose" 
 mongoose.set( 'useFindAndModify', false );
-const EconomySchema = require( "./model/econonpm my" );
+const EconomySchema = require( "./model/economy" );
 import {IsNaS} from "./util/util";
 export class Economy {
     //--------------------------------------------------------------------------------------\\

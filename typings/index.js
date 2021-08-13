@@ -42,7 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Economy = void 0;
 var mongoose_1 = __importDefault(require("mongoose"));
 mongoose_1.default.set('useFindAndModify', false);
-var EconomySchema = require("./model/econonpm my");
+var EconomySchema = require("./model/economy");
 var util_1 = require("./util/util");
 var Economy = /** @class */ (function () {
     function Economy() {
