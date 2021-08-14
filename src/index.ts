@@ -1,7 +1,7 @@
-import mongoose from "mongoose" 
-mongoose.set( 'useFindAndModify', false );
-const EconomySchema = require( "./model/economy" );
-import {IsNaS} from "./util/util";
+import mongoose from "mongoose"
+mongoose.set('useFindAndModify', false);
+const EconomySchema = require("./model/economy");
+import { IsNaS } from "./util/util";
 export class Economy {
     //--------------------------------------------------------------------------------------\\
     //---------------------------------------------------------------------------------------\\
@@ -9,12 +9,13 @@ export class Economy {
      * @param {string} url Here you will have the connection link to mongodb
     **/
 
-    static async connect( url:string ) {
-        if ( !url ) return console.log( 'you need to enter a connection to MongoDB.' )
-        return mongoose.connect( url, {
+    static async connect(url: string) {
+        if (!url) return console.log('you need to enter a connection to MongoDB.')
+        IsNaS(url, 'Url')
+        return mongoose.connect(url, {
             useNewUrlParser: true,
             useUnifiedTopology: true
-        } )
+        })
     }
     //--------------------------------------------------------------------------------------\\
     //---------------------------------------------------------------------------------------\\
@@ -23,14 +24,14 @@ export class Economy {
      * @param {string} Guild Here you will have the server, that is, where will the money or others be.
      *  
     **/
-    static async getUser( User:string, Guild:string ) {
+    static async getUser(User: string, Guild: string) {
+        if (!User) return console.log('[User] You need to enter a user ID.')
+        if (!Guild) return console.log('[Guild] You need to enter a server ID.')
         IsNaS(User, 'User')
         IsNaS(Guild, 'Guild')
-        if ( !User ) return console.log( '[User] You need to enter a user ID.' )
-        if ( !Guild ) return console.log( '[Guild] You need to enter a server ID.' )
 
-        let user = await EconomySchema.findOne( { User: User, Guild: Guild } )
-        if ( !user ) return false
+        let user = await EconomySchema.findOne({ User: User, Guild: Guild })
+        if (!user) return false
 
         return user
     }
@@ -41,29 +42,29 @@ export class Economy {
     **/
     //--------------------------------------------------------------------------------------\\
     //---------------------------------------------------------------------------------------\\
-    static async addWallet( User:string, Guild:string, Amount:number ) {//サーバーユーザーに金額を追加します。
+    static async addWallet(User: string, Guild: string, Amount: number) {//サーバーユーザーに金額を追加します。
         IsNaS(User, 'User')
         IsNaS(Guild, 'Guild')
-        if ( !User ) return console.log( '[User]  You need to enter a user ID.' )
-        if ( !Guild ) return console.log( '[Guild] You need to enter a server ID. to enter a user ID.' )
-        if ( !Amount ) return console.log( '[Amount] You need to enter the amount.' )
-        if ( isNaN( Amount ) ) return console.log( '[Amount NaN] The amount entered is not a number.' )
-        if ( Amount < 0 ) return console.log( '[NMZ] The amount entered is not less than zero or zero' )
+        if (!User) return console.log('[User]  You need to enter a user ID.')
+        if (!Guild) return console.log('[Guild] You need to enter a server ID. to enter a user ID.')
+        if (!Amount) return console.log('[Amount] You need to enter the amount.')
+        if (isNaN(Amount)) return console.log('[Amount NaN] The amount entered is not a number.')
+        if (Amount < 0) return console.log('[NMZ] The amount entered is not less than zero or zero')
 
-        let user = await EconomySchema.findOne( { User: User, Guild: Guild } )
+        let user = await EconomySchema.findOne({ User: User, Guild: Guild })
 
-        if ( !user ) {
-            const newUser = new EconomySchema( {
+        if (!user) {
+            const newUser = new EconomySchema({
                 Guild: Guild,
                 User: User,
                 Wallet: 0,
                 Bank: 0
-            } )
-            await newUser.save().catch( (err: any) => console.error( `[MongoDB-Error]${ err }` ) )
+            })
+            await newUser.save().catch((err: any) => console.error(`[MongoDB-Error]${err}`))
             return Amount;
         }
 
-        user.Wallet += Amount; await user.save().catch( (err: any) => console.error( `[MongoDB-Error]${ err }` ) )
+        user.Wallet += Amount; await user.save().catch((err: any) => console.error(`[MongoDB-Error]${err}`))
         return Amount;
     }
     //--------------------------------------------------------------------------------------\\
@@ -73,171 +74,176 @@ export class Economy {
      * @param {string} Guild Here you will have the server, that is, where will the money or others be.
      * @param {number} Amount Here you will put the amount of money.
     **/
-    static async removeWallet( User:string, Guild:string, Amount:number ) {
+    static async removeWallet(User: string, Guild: string, Amount: number) {
+        if (!User) return console.log('[User] You need to enter a user ID.')
+        if (!Guild) return console.log('[Guild] You need to enter a server ID.')
         IsNaS(User, 'User')
         IsNaS(Guild, 'Guild')
-        if ( !User ) return console.log( '[User] You need to enter a user ID.' )
-        if ( !Guild ) return console.log( '[Guild] You need to enter a server ID.' )
-        if ( !Amount ) return console.log( '[Amount] You need to enter the amount.' )
-        if ( isNaN( Amount ) ) return console.log( '[Amount NaN] The amount entered is not a number.' )
-        if ( Amount < 0 ) return console.log( '[NMZ] The amount entered is not less than zero or zero' )
+        if (!Amount) return console.log('[Amount] You need to enter the amount.')
+        if (isNaN(Amount)) return console.log('[Amount NaN] The amount entered is not a number.')
+        if (Amount < 0) return console.log('[NMZ] The amount entered is not less than zero or zero')
 
-        let user = await EconomySchema.findOne( { User: User, Guild: Guild } )
+        let user = await EconomySchema.findOne({ User: User, Guild: Guild })
 
-        if ( !user ) {
-            const newUser = new EconomySchema( {
+        if (!user) {
+            const newUser = new EconomySchema({
                 Guild: Guild,
                 User: User,
                 Wallet: 0,
                 Bank: 0
-            } )
-            await newUser.save().catch( (err: any) => console.error( `[MongoDB-Error]${ err }` ) )
+            })
+            await newUser.save().catch((err: any) => console.error(`[MongoDB-Error]${err}`))
             return Amount;
         }
-        if ( Amount > user.Wallet ) {
+        if (Amount > user.Wallet) {
             user.Wallet -= user.Wallet;
 
             await user.save()
-                .catch( (err: any) => console.log( err ) );
+                .catch((err: any) => console.log(err));
 
             return Amount;
 
         }
-        user.Wallet -= Amount; await user.save().catch( (err: any) => console.error( `[MongoDB-Error]${ err }` ) )
+        user.Wallet -= Amount; await user.save().catch((err: any) => console.error(`[MongoDB-Error]${err}`))
         return Amount;
     }
     //--------------------------------------------------------------------------------------\\
     //---------------------------------------------------------------------------------------\\
     /**
-     * @param 
+     * @param {string} User Here you will put the user, that is, who will receive the money or others.
+     * @param {string} Guild Here you will have the server, that is, where will the money or others be.
+     * @param {number} Amount Here you will put the amount of money.
     **/
-    static async removeBank( User:string, Guild:string, Amount:number ) {
+    static async removeBank(User: string, Guild: string, Amount: number) {
         IsNaS(User, 'User')
         IsNaS(Guild, 'Guild')
-        if ( !User ) return console.log( '[User] You need to enter a user ID.' )
-        if ( !Guild ) return console.log( '[Guild]You need to enter a server ID.' )
-        if ( !Amount ) return console.log( '[Amount] You need to enter the amount.' )
-        if ( isNaN( Amount ) ) return console.log( '[Amount NaN] The amount entered is not a number.' )
-        if ( Amount < 0 ) return console.log( '[NMZ] The amount entered is not less than zero or zero' )
+        if (!User) return console.log('[User] You need to enter a user ID.')
+        if (!Guild) return console.log('[Guild]You need to enter a server ID.')
+        if (!Amount) return console.log('[Amount] You need to enter the amount.')
+        if (isNaN(Amount)) return console.log('[Amount NaN] The amount entered is not a number.')
+        if (Amount < 0) return console.log('[NMZ] The amount entered is not less than zero or zero')
 
-        let user = await EconomySchema.findOne( { User: User, Guild: Guild } )
+        let user = await EconomySchema.findOne({ User: User, Guild: Guild })
 
-        if ( !user ) {
-            const newUser = new EconomySchema( {
+        if (!user) {
+            const newUser = new EconomySchema({
                 Guild: Guild,
                 User: User,
                 Wallet: 0,
                 Bank: 0
-            } )
-            await newUser.save().catch( (err: any) => console.error( `[MongoDB-Error]${ err }` ) )
+            })
+            await newUser.save().catch((err: any) => console.error(`[MongoDB-Error]${err}`))
             return Amount;
         }
-        if ( Amount > user.Bank ) {
+        if (Amount > user.Bank) {
             user.Bank -= user.Bank;
 
             await user.save()
-                .catch( (err: any) => console.log( err ) );
+                .catch((err: any) => console.log(err));
 
             return Amount;
 
         }
-        user.Bank -= Amount; await user.save().catch( (err: any) => console.error( `[MongoDB-Error]${ err }` ) )
+        user.Bank -= Amount; await user.save().catch((err: any) => console.error(`[MongoDB-Error]${err}`))
         return Amount;
     }
     //--------------------------------------------------------------------------------------\\
     //---------------------------------------------------------------------------------------\\
     /**
+     * @param {string} User Here you will put the user, that is, who will receive the money or others.
+     * @param {string} Guild Here you will have the server, that is, where will the money or others be.
+     * @param {number} Amount Here you will put the amount of money.
     **/
-    static async addBank( User:string, Guild:string, Amount:number ) {
+    static async addBank(User: string, Guild: string, Amount: number) {
+        if (!User) return console.log('[User] You need to enter a user ID.')
+        if (!Guild) return console.log('[Guild] You need to enter a server ID.')
         IsNaS(User, 'User')
         IsNaS(Guild, 'Guild')
-        if ( !User ) return console.log( '[User] You need to enter a user ID.' )
-        if ( !Guild ) return console.log( '[Guild] You need to enter a server ID.' )
-        if ( !Amount ) return console.log( '[Amount] You need to enter the amount.' )
-        if ( isNaN( Amount ) ) return console.log( '[Amount NaN] The amount entered is not a number.' )
-        if ( Amount < 0 ) return console.log( '[NMZ] The amount entered is not less than zero or zero' )
+        if (!Amount) return console.log('[Amount] You need to enter the amount.')
+        if (isNaN(Amount)) return console.log('[Amount NaN] The amount entered is not a number.')
+        if (Amount < 0) return console.log('[NMZ] The amount entered is not less than zero or zero')
 
-        let user = await EconomySchema.findOne( { User: User, Guild: Guild } )
+        let user = await EconomySchema.findOne({ User: User, Guild: Guild })
 
-        if ( !user ) {
-            const newUser = new EconomySchema( {
+        if (!user) {
+            const newUser = new EconomySchema({
                 Guild: Guild,
                 User: User,
                 Wallet: 0,
                 Bank: 0
-            } )
-            await newUser.save().catch( (err: any) => console.error( `[MongoDB-Error]${ err }` ) )
+            })
+            await newUser.save().catch((err: any) => console.error(`[MongoDB-Error]${err}`))
             return Amount;
         }
 
-        user.Bank += Amount; await user.save().catch( (err: any) => console.error( `[MongoDB-Error]${ err }` ) )
+        user.Bank += Amount; await user.save().catch((err: any) => console.error(`[MongoDB-Error]${err}`))
         return Amount;
     }
     //--------------------------------------------------------------------------------------\\
     //---------------------------------------------------------------------------------------\\
     /**
-     *
-     *
-     *
+     * @param {string} User Here you will put the user, that is, who will receive the money or others.
+     * @param {string} Guild Here you will have the server, that is, where will the money or others be.
+     * @param {number} Amount Here you will put the amount of money.
     **/
-    static async Withdraw( User:string, Guild:string, Amount:number ) {
+    static async Withdraw(User: string, Guild: string, Amount: number) {
+        if (!User) return console.log('[User] You need to enter a user ID.')
+        if (!Guild) return console.log('[Guild] You need to enter a server ID.')
         IsNaS(User, 'User')
         IsNaS(Guild, 'Guild')
-        if ( !User ) return console.log( '[User] You need to enter a user ID.' )
-        if ( !Guild ) return console.log( '[Guild] You need to enter a server ID.' )
-        if ( !Amount ) return console.log( '[Amount] You need to enter the amount.' )
-        let x = Number( Amount )
-        if ( isNaN( x ) ) return console.log( '[Amount NaN] The amount entered is not a number.' )
-        if ( x < 0 ) return console.log( '[NMZ] The amount entered is not less than zero or zero' )
-        let user = await EconomySchema.findOne( { User: User, Guild: Guild } )
-        if ( !user ) {
-            const newUser = new EconomySchema( {
+        if (!Amount) return console.log('[Amount] You need to enter the amount.')
+        let x = Number(Amount)
+        if (isNaN(x)) return console.log('[Amount NaN] The amount entered is not a number.')
+        if (x < 0) return console.log('[NMZ] The amount entered is not less than zero or zero')
+        let user = await EconomySchema.findOne({ User: User, Guild: Guild })
+        if (!user) {
+            const newUser = new EconomySchema({
                 Guild: Guild,
                 User: User,
                 Wallet: 0,
                 Bank: 0
-            } )
-            await newUser.save().catch( (err: any) => console.error( `[MongoDB-Error]${ err }` ) )
+            })
+            await newUser.save().catch((err: any) => console.error(`[MongoDB-Error]${err}`))
             return Amount;
         }
-        if ( x > user.Bank ) return console.log( '[Amount] The amount entered exceeds the amount the user has in the bank' )
+        if (x > user.Bank) return console.log('[Amount] The amount entered exceeds the amount the user has in the bank')
         user.Bank -= x
         user.Wallet += x
         await user.save()
-            .catch( (err: any) => console.log( err ) );
+            .catch((err: any) => console.log(err));
         return Amount;
     }
     //--------------------------------------------------------------------------------------\\
     //---------------------------------------------------------------------------------------\\
     /**
-     * @param 
-     * @param 
-     * @param 
+     * @param {string} User Here you will put the user, that is, who will receive the money or others.
+     * @param {string} Guild Here you will have the server, that is, where will the money or others be.
+     * @param {number} Amount Here you will put the amount of money.
     **/
-    static async Deposit( User:string, Guild:string, Amount:number ) {
+    static async Deposit(User: string, Guild: string, Amount: number) {
+        if (!User) return console.log('[User] You need to enter a user ID.')
+        if (!Guild) return console.log('[Guild] You need to enter a server ID.')
         IsNaS(User, 'User')
         IsNaS(Guild, 'Guild')
-        if ( !User ) return console.log( '[User] You need to enter a user ID.' )
-        if ( !Guild ) return console.log( '[Guild] You need to enter a server ID.' )
-        if ( !Amount ) return console.log( '[Amount] You need to enter the amount.' )
-        let x = Number( Amount )
-        if ( isNaN( x ) ) return console.log( '[Amount NaN] The amount entered is not a number.' )
-        if ( x < 0 ) return console.log( '[NMZ] The amount entered is not less than zero or zero' )
-        let user = await EconomySchema.findOne( { User: User, Guild: Guild } )
-        if ( !user ) {
-            const newUser = new EconomySchema( {
+        if (!Amount) return console.log('[Amount] You need to enter the amount.')
+        let x = Number(Amount)
+        if (isNaN(x)) return console.log('[Amount NaN] The amount entered is not a number.')
+        if (x < 0) return console.log('[NMZ] The amount entered is not less than zero or zero')
+        let user = await EconomySchema.findOne({ User: User, Guild: Guild })
+        if (!user) {
+            const newUser = new EconomySchema({
                 Guild: Guild,
                 User: User,
                 Wallet: 0,
                 Bank: 0
-            } )
-            await newUser.save().catch( (err: any) => console.error( `[MongoDB-Error]${ err }` ) )
+            })
+            await newUser.save().catch((err: any) => console.error(`[MongoDB-Error]${err}`))
             return Amount;
         }
-        if ( x > user.Wallet ) return console.log( '[Amount] The amount entered exceeds the amount the user has in the bank' )
+        if (x > user.Wallet) return console.log('[Amount] The amount entered exceeds the amount the user has in the bank')
         user.Wallet -= x
         user.Bank += x
-        await user.save().catch( (err: any) => console.log( err ) );
+        await user.save().catch((err: any) => console.log(err));
         return Amount;
     }
     //--------------------------------------------------------------------------------------\\
@@ -246,33 +252,33 @@ export class Economy {
      * @param {string} User Here you will put the user, that is, who will receive the money or others.
      * @param {string} Guild Here you will have the server, that is, where will the money or others be. 
     **/
-    static async createUser( User: string, Guild: string ) {
+    static async createUser(User: string, Guild: string) {
         IsNaS(User, 'User')
         IsNaS(Guild, 'Guild')
-        if ( !User ) return console.log( '[User] You need to enter a user ID.。' )
-        if ( !Guild ) return console.log( '[Guild] You need to enter a server ID.' )
-        let user = await EconomySchema.findOne( { User: User, Guild: Guild } );
-        if ( user ) return false;
-        const newUser = new EconomySchema( {
+        if (!User) return console.log('[User] You need to enter a user ID.。')
+        if (!Guild) return console.log('[Guild] You need to enter a server ID.')
+        let user = await EconomySchema.findOne({ User: User, Guild: Guild });
+        if (user) return false;
+        const newUser = new EconomySchema({
             Guild: Guild,
             User: User,
             Wallet: 0,
             Bank: 0
-        } )
-        await newUser.save().catch( (err: any) => console.error( `[MongoDB-Error]${ err }` ) )
+        })
+        await newUser.save().catch((err: any) => console.error(`[MongoDB-Error]${err}`))
     }
     /**
      * @param {string} User Here you will put the user, that is, who will receive the money or others.
      * @param {string} Guild Here you will have the server, that is, where will the money or others be.
     **/
-    static async DeleteUser( User: string, Guild: string ) {
-        if ( !User ) return console.log( '[User] You need to enter a user ID.' )
-        if ( !Guild ) return console.log( '[Guild] You need to enter a server ID.' )
+    static async DeleteUser(User: string, Guild: string) {
+        if (!User) return console.log('[User] You need to enter a user ID.')
+        if (!Guild) return console.log('[Guild] You need to enter a server ID.')
 
-        let user = await EconomySchema.findOne( { User: User, Guild: Guild } );
-        if ( !user ) return false;
+        let user = await EconomySchema.findOne({ User: User, Guild: Guild });
+        if (!user) return false;
 
-        await EconomySchema.findOneAndRemove( { User: User, Guild: Guild } );
+        await EconomySchema.findOneAndRemove({ User: User, Guild: Guild });
 
     }
     /**
@@ -280,20 +286,20 @@ export class Economy {
      * @param {string} Guild Here you will have the server, that is, where will the money or others be. 
      * @param {number} Amount Here you will put the amount of money. 
     **/
-    static async setBank( User:string, Guild:string, Amount:number ) {
+    static async setBank(User: string, Guild: string, Amount: number) {
+        if (!User) return console.log('[User] You need to enter a user ID.')
+        if (!Guild) return console.log('[Guild] You need to enter a server ID.')
         IsNaS(User, 'User')
         IsNaS(Guild, 'Guild')
-        if ( !User ) return console.log( '[User] You need to enter a user ID.' )
-        if ( !Guild ) return console.log( '[Guild] You need to enter a server ID.' )
-        if ( !Amount ) return console.log( '[Amount] You need to enter the amount.' )
-        if ( isNaN( Amount ) ) return console.log( '[NaN] The amount entered is not a number.' )
-        if ( Amount < 0 ) return console.log( '[AIC] The amount entered is not less than zero or zero' )
+        if (!Amount) return console.log('[Amount] You need to enter the amount.')
+        if (isNaN(Amount)) return console.log('[NaN] The amount entered is not a number.')
+        if (Amount < 0) return console.log('[AIC] The amount entered is not less than zero or zero')
 
-        let user = await EconomySchema.findOne( { User: User, Guild: Guild } )
-        if ( !user ) return false
+        let user = await EconomySchema.findOne({ User: User, Guild: Guild })
+        if (!user) return false
 
         user.Bank = Amount
-        await user.save().catch( (err: any) => console.error( `[MongoDB-Error]${ err }` ) )
+        await user.save().catch((err: any) => console.error(`[MongoDB-Error]${err}`))
         return Amount;
 
     }
@@ -302,20 +308,20 @@ export class Economy {
      * @param {string} Guild Here you will have the server, that is, where will the money or others be.
      * @param {number} Amount Here you will put the amount of money.
     **/
-    static async setWallet( User:string, Guild:string, Amount:number ) {
+    static async setWallet(User: string, Guild: string, Amount: number) {
+        if (!User) return console.log('[User] You need to enter a user ID.')
+        if (!Guild) return console.log('[Guild] You need to enter a server ID.')
         IsNaS(User, 'User')
         IsNaS(Guild, 'Guild')
-        if ( !User ) return console.log( '[User] You need to enter a user ID.' )
-        if ( !Guild ) return console.log( '[Guild] You need to enter a server ID.' )
-        if ( !Amount ) return console.log( '[Amount] You need to enter the amount.' )
-        if ( isNaN( Amount ) ) return console.log( '[NaN] The amount entered is not a number.' )
-        if ( Amount < 0 ) return console.log( '[AIC] The amount entered is not less than zero or zero' )
+        if (!Amount) return console.log('[Amount] You need to enter the amount.')
+        if (isNaN(Amount)) return console.log('[NaN] The amount entered is not a number.')
+        if (Amount < 0) return console.log('[AIC] The amount entered is not less than zero or zero')
 
-        let user = await EconomySchema.findOne( { User: User, Guild: Guild } )
-        if ( !user ) return false
+        let user = await EconomySchema.findOne({ User: User, Guild: Guild })
+        if (!user) return false
 
         user.Wallet = Amount
-        await user.save().catch( (err: any) => console.error( `[MongoDB-Error]${ err }` ) )
+        await user.save().catch((err: any) => console.error(`[MongoDB-Error]${err}`))
         return Amount;
     }
     /**
@@ -324,34 +330,37 @@ export class Economy {
      * @param {string} Guild Here you will have the server, that is, where will the money or others be.
      * @param {number} Amount Here you will put the amount of money.
     **/
-    static async transfer( ToUser: string, FromUser: string, Guild: string, Amount: number ) {
+    static async transfer(ToUser: string, FromUser: string, Guild: string, Amount: number) {
+        if (!ToUser) return console.log('[To User] You need to enter a user ID.')
         IsNaS(ToUser, 'User')
+
+        if (!FromUser) return console.log('[From User] You need to enter a user ID.')
         IsNaS(FromUser, 'User')
+
+        if (!Guild) return console.log('[Guild] You need to enter a server ID.')
         IsNaS(Guild, 'Guild')
-        if ( !ToUser ) return console.log( '[To User] You need to enter a user ID.' )
-        if ( !FromUser ) return console.log( '[From User] You need to enter a user ID.' )
-        if ( !Guild ) return console.log( '[Guild] You need to enter a server ID.' )
-        if ( !Amount ) return console.log( '[Amount] You need to enter the amount.' )
-        if ( isNaN( Amount ) ) return console.log( '[NaN] The amount entered is not a number.' )
-        if ( Amount < 0 ) return console.log( '[AIC] The amount entered is not less than zero or zero' )
-        let user1 = await EconomySchema.findOne( { User: ToUser, Guild: Guild } )
-        let user2 = await EconomySchema.findOne( { User: FromUser, Guild: Guild } )
-        if ( !user1 ) return false
-        if(!user2) {
+
+        if (!Amount) return console.log('[Amount] You need to enter the amount.')
+        if (isNaN(Amount)) return console.log('[NaN] The amount entered is not a number.')
+        if (Amount < 0) return console.log('[AIC] The amount entered is not less than zero or zero')
+        let user1 = await EconomySchema.findOne({ User: ToUser, Guild: Guild })
+        let user2 = await EconomySchema.findOne({ User: FromUser, Guild: Guild })
+        if (!user1) return false
+        if (!user2) {
             user1.Wallet -= Amount
-            const newUser = new EconomySchema( {
+            const newUser = new EconomySchema({
                 Guild: Guild,
                 User: user2,
                 Wallet: Amount,
                 Bank: 0
-            } )
-            await newUser.save().catch( (err: any) => console.error( `[MongoDB-Error]${ err }` ) )
-            await user1.save().catch( (err: any) => console.error( `[MongoDB-Error]${ err }` ) )
+            })
+            await newUser.save().catch((err: any) => console.error(`[MongoDB-Error]${err}`))
+            await user1.save().catch((err: any) => console.error(`[MongoDB-Error]${err}`))
         }
         user1.Wallet -= Amount
         user2.Wallet += Amount
-        await user1.save().catch( (err: any) => console.error( `[MongoDB-Error]${ err }` ) )
-        await user2.save().catch( (err: any) => console.error( `[MongoDB-Error]${ err }` ) )
+        await user1.save().catch((err: any) => console.error(`[MongoDB-Error]${err}`))
+        await user2.save().catch((err: any) => console.error(`[MongoDB-Error]${err}`))
     }
 }
 

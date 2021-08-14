@@ -57,6 +57,7 @@ var Economy = /** @class */ (function () {
             return __generator(this, function (_a) {
                 if (!url)
                     return [2 /*return*/, console.log('you need to enter a connection to MongoDB.')];
+                util_1.IsNaS(url, 'Url');
                 return [2 /*return*/, mongoose_1.default.connect(url, {
                         useNewUrlParser: true,
                         useUnifiedTopology: true
@@ -77,12 +78,12 @@ var Economy = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        util_1.IsNaS(User, 'User');
-                        util_1.IsNaS(Guild, 'Guild');
                         if (!User)
                             return [2 /*return*/, console.log('[User] You need to enter a user ID.')];
                         if (!Guild)
                             return [2 /*return*/, console.log('[Guild] You need to enter a server ID.')];
+                        util_1.IsNaS(User, 'User');
+                        util_1.IsNaS(Guild, 'Guild');
                         return [4 /*yield*/, EconomySchema.findOne({ User: User, Guild: Guild })];
                     case 1:
                         user = _a.sent();
@@ -155,12 +156,12 @@ var Economy = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        util_1.IsNaS(User, 'User');
-                        util_1.IsNaS(Guild, 'Guild');
                         if (!User)
                             return [2 /*return*/, console.log('[User] You need to enter a user ID.')];
                         if (!Guild)
                             return [2 /*return*/, console.log('[Guild] You need to enter a server ID.')];
+                        util_1.IsNaS(User, 'User');
+                        util_1.IsNaS(Guild, 'Guild');
                         if (!Amount)
                             return [2 /*return*/, console.log('[Amount] You need to enter the amount.')];
                         if (isNaN(Amount))
@@ -202,7 +203,9 @@ var Economy = /** @class */ (function () {
     //--------------------------------------------------------------------------------------\\
     //---------------------------------------------------------------------------------------\\
     /**
-     * @param
+     * @param {string} User Here you will put the user, that is, who will receive the money or others.
+     * @param {string} Guild Here you will have the server, that is, where will the money or others be.
+     * @param {number} Amount Here you will put the amount of money.
     **/
     Economy.removeBank = function (User, Guild, Amount) {
         return __awaiter(this, void 0, void 0, function () {
@@ -257,6 +260,9 @@ var Economy = /** @class */ (function () {
     //--------------------------------------------------------------------------------------\\
     //---------------------------------------------------------------------------------------\\
     /**
+     * @param {string} User Here you will put the user, that is, who will receive the money or others.
+     * @param {string} Guild Here you will have the server, that is, where will the money or others be.
+     * @param {number} Amount Here you will put the amount of money.
     **/
     Economy.addBank = function (User, Guild, Amount) {
         return __awaiter(this, void 0, void 0, function () {
@@ -264,12 +270,12 @@ var Economy = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        util_1.IsNaS(User, 'User');
-                        util_1.IsNaS(Guild, 'Guild');
                         if (!User)
                             return [2 /*return*/, console.log('[User] You need to enter a user ID.')];
                         if (!Guild)
                             return [2 /*return*/, console.log('[Guild] You need to enter a server ID.')];
+                        util_1.IsNaS(User, 'User');
+                        util_1.IsNaS(Guild, 'Guild');
                         if (!Amount)
                             return [2 /*return*/, console.log('[Amount] You need to enter the amount.')];
                         if (isNaN(Amount))
@@ -303,9 +309,9 @@ var Economy = /** @class */ (function () {
     //--------------------------------------------------------------------------------------\\
     //---------------------------------------------------------------------------------------\\
     /**
-     *
-     *
-     *
+     * @param {string} User Here you will put the user, that is, who will receive the money or others.
+     * @param {string} Guild Here you will have the server, that is, where will the money or others be.
+     * @param {number} Amount Here you will put the amount of money.
     **/
     Economy.Withdraw = function (User, Guild, Amount) {
         return __awaiter(this, void 0, void 0, function () {
@@ -313,12 +319,12 @@ var Economy = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        util_1.IsNaS(User, 'User');
-                        util_1.IsNaS(Guild, 'Guild');
                         if (!User)
                             return [2 /*return*/, console.log('[User] You need to enter a user ID.')];
                         if (!Guild)
                             return [2 /*return*/, console.log('[Guild] You need to enter a server ID.')];
+                        util_1.IsNaS(User, 'User');
+                        util_1.IsNaS(Guild, 'Guild');
                         if (!Amount)
                             return [2 /*return*/, console.log('[Amount] You need to enter the amount.')];
                         x = Number(Amount);
@@ -357,9 +363,9 @@ var Economy = /** @class */ (function () {
     //--------------------------------------------------------------------------------------\\
     //---------------------------------------------------------------------------------------\\
     /**
-     * @param
-     * @param
-     * @param
+     * @param {string} User Here you will put the user, that is, who will receive the money or others.
+     * @param {string} Guild Here you will have the server, that is, where will the money or others be.
+     * @param {number} Amount Here you will put the amount of money.
     **/
     Economy.Deposit = function (User, Guild, Amount) {
         return __awaiter(this, void 0, void 0, function () {
@@ -367,12 +373,12 @@ var Economy = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        util_1.IsNaS(User, 'User');
-                        util_1.IsNaS(Guild, 'Guild');
                         if (!User)
                             return [2 /*return*/, console.log('[User] You need to enter a user ID.')];
                         if (!Guild)
                             return [2 /*return*/, console.log('[Guild] You need to enter a server ID.')];
+                        util_1.IsNaS(User, 'User');
+                        util_1.IsNaS(Guild, 'Guild');
                         if (!Amount)
                             return [2 /*return*/, console.log('[Amount] You need to enter the amount.')];
                         x = Number(Amount);
@@ -482,12 +488,12 @@ var Economy = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        util_1.IsNaS(User, 'User');
-                        util_1.IsNaS(Guild, 'Guild');
                         if (!User)
                             return [2 /*return*/, console.log('[User] You need to enter a user ID.')];
                         if (!Guild)
                             return [2 /*return*/, console.log('[Guild] You need to enter a server ID.')];
+                        util_1.IsNaS(User, 'User');
+                        util_1.IsNaS(Guild, 'Guild');
                         if (!Amount)
                             return [2 /*return*/, console.log('[Amount] You need to enter the amount.')];
                         if (isNaN(Amount))
@@ -519,12 +525,12 @@ var Economy = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        util_1.IsNaS(User, 'User');
-                        util_1.IsNaS(Guild, 'Guild');
                         if (!User)
                             return [2 /*return*/, console.log('[User] You need to enter a user ID.')];
                         if (!Guild)
                             return [2 /*return*/, console.log('[Guild] You need to enter a server ID.')];
+                        util_1.IsNaS(User, 'User');
+                        util_1.IsNaS(Guild, 'Guild');
                         if (!Amount)
                             return [2 /*return*/, console.log('[Amount] You need to enter the amount.')];
                         if (isNaN(Amount))
@@ -557,15 +563,15 @@ var Economy = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        util_1.IsNaS(ToUser, 'User');
-                        util_1.IsNaS(FromUser, 'User');
-                        util_1.IsNaS(Guild, 'Guild');
                         if (!ToUser)
                             return [2 /*return*/, console.log('[To User] You need to enter a user ID.')];
+                        util_1.IsNaS(ToUser, 'User');
                         if (!FromUser)
                             return [2 /*return*/, console.log('[From User] You need to enter a user ID.')];
+                        util_1.IsNaS(FromUser, 'User');
                         if (!Guild)
                             return [2 /*return*/, console.log('[Guild] You need to enter a server ID.')];
+                        util_1.IsNaS(Guild, 'Guild');
                         if (!Amount)
                             return [2 /*return*/, console.log('[Amount] You need to enter the amount.')];
                         if (isNaN(Amount))

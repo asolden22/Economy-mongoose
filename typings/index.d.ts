@@ -23,22 +23,27 @@ export declare class Economy {
     **/
     static removeWallet(User: string, Guild: string, Amount: number): Promise<number | void>;
     /**
-     * @param
+     * @param {string} User Here you will put the user, that is, who will receive the money or others.
+     * @param {string} Guild Here you will have the server, that is, where will the money or others be.
+     * @param {number} Amount Here you will put the amount of money.
     **/
     static removeBank(User: string, Guild: string, Amount: number): Promise<number | void>;
     /**
+     * @param {string} User Here you will put the user, that is, who will receive the money or others.
+     * @param {string} Guild Here you will have the server, that is, where will the money or others be.
+     * @param {number} Amount Here you will put the amount of money.
     **/
     static addBank(User: string, Guild: string, Amount: number): Promise<number | void>;
     /**
-     *
-     *
-     *
+     * @param {string} User Here you will put the user, that is, who will receive the money or others.
+     * @param {string} Guild Here you will have the server, that is, where will the money or others be.
+     * @param {number} Amount Here you will put the amount of money.
     **/
     static Withdraw(User: string, Guild: string, Amount: number): Promise<number | void>;
     /**
-     * @param
-     * @param
-     * @param
+     * @param {string} User Here you will put the user, that is, who will receive the money or others.
+     * @param {string} Guild Here you will have the server, that is, where will the money or others be.
+     * @param {number} Amount Here you will put the amount of money.
     **/
     static Deposit(User: string, Guild: string, Amount: number): Promise<number | void>;
     /**
