@@ -2,7 +2,7 @@
   "name": "economy-mongoose",
   "main": "./typings/main.js",
   "types": "./typings/main.d.ts",
-  "version": "1.2.2",
+  "version": "1.2.5",
   "description": "A basic package that helps to perform easy economy commands especially to create bots.",
   "repository": {
     "type": "git",
