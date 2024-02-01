@@ -81,13 +81,11 @@ user.Guild // You access a server/guild.
 ## Balance command example
 
 ```ts
-let member = <message>.mentions.members.first() || <message>.member
-let user = await Economy.getUser(member, message.Guild.id)
+let user = await Economy.getUser(USER, GUILD)
 
-let embed = new MessageEmbed()
-.addField('Money', user.Wallet)
-.addField('Bank', user.Bank)
-.addField('Money in total', user.bank+user.Wallet)
+console.log('Money', user.Wallet)
+console.log('Bank', user.Bank)
+console.log('Money in total', user.bank+user.Wallet)
 ```
 
 ## How to do a basic pay command
@@ -95,8 +93,5 @@ let embed = new MessageEmbed()
 ```ts
 const {Economy} = require("economy-mongoose")//Require the package
 
-let me = <message>.member//You
-let member = <message>.mentions.members.first()//Member to pay
-let Guild = <message>.guild.id//The GuildID (OPTIONAL)
-Economy.transfer(me.id, member.id, Guild, 100)
+Economy.transfer(FROM, TO, GUILD, AMOUNT)
 ```
